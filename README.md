@@ -3,6 +3,14 @@
 **Shift Insight** is a full-stack analytics dashboard for monitoring warehouse and logistics operations.  
 It visualizes real-time performance metrics such as **active shifts, stations, and event throughput**, powered by **Next.js**, **Prisma**, and **PostgreSQL**.
 
+## Project Status: Actively Being Improved
+
+This project is functional but under ongoing development.  
+Planned improvements include:
+- Real warehouse data integration via Prisma + Supabase
+- Authentication and user roles
+- Performance insights dashboard with filtering
+
 ---
 
 ## Live Demo  
