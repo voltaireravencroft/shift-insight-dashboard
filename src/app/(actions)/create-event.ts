@@ -1,34 +1,48 @@
 'use server';
 
-import { z } from 'zod';
-import { prisma } from '@/lib/db'; // make sure this path matches your actual prisma helper
+import { prisma } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 
-const EventSchema = z.object({
-  stationId: z.string().min(1),
-  kind: z.enum(['THROUGHPUT', 'DELAY']),
-  value: z.coerce.number().int().positive(),
-});
+type NewEvent = {
+  stationId: string;
+  kind: 'THROUGHPUT' | 'DELAY';
+  value: number;
+};
 
-export async function createEvent(formData: FormData) {
-  const parsed = EventSchema.safeParse({
-    stationId: formData.get('stationId'),
-    kind: formData.get('kind'),
-    value: formData.get('value'),
-  });
+// return a small discriminated union so the client can react if needed
+type CreateEventResult =
+  | { ok: true }
+  | { ok: false; error: string };
 
-  if (!parsed.success) throw new Error('Invalid input');
+export async function createEvent(
+  input: NewEvent
+): Promise<CreateEventResult> {
+  try {
+    const { stationId, kind, value } = input;
 
-  await prisma.event.create({
-    data: {
-      stationId: parsed.data.stationId,
-      kind: parsed.data.kind as any,
-      value: parsed.data.value,
-      happenedAt: new Date(),
-    },
-  });
+    if (!stationId || !kind || Number.isNaN(value)) {
+      return { ok: false, error: 'Invalid input' };
+    }
 
-  // Refresh dashboard + events list if present
-  revalidatePath('/');
-  revalidatePath('/events');
+    // If you have a real shift id, use it; otherwise seed created one or null
+    await prisma.event.create({
+      data: {
+        stationId,
+        kind,
+        value,
+        happenedAt: new Date(),
+        // shiftId: <put a real shift id if required by your schema>
+      },
+    });
+
+    // Refresh data on the dashboard
+    revalidatePath('/');
+
+    return { ok: true };
+  } catch (err) {
+    // never type catch param as `any`; treat it as unknown
+    const msg =
+      err instanceof Error ? err.message : 'Unknown error';
+    return { ok: false, error: msg };
+  }
 }
