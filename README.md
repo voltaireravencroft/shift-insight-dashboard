@@ -1,60 +1,41 @@
-# Shift Insight Dashboard
+# Shift Insight — Warehouse Ops Dashboard (MVP)
 
-**Shift Insight** is a full-stack analytics dashboard for monitoring warehouse and logistics operations.  
-It visualizes real-time performance metrics such as **active shifts, stations, and event throughput**, powered by **Next.js**, **Prisma**, and **PostgreSQL**.
-
-## Project Status: Actively Being Improved
-
-This project is functional but under ongoing development.  
-Planned improvements include:
-- Real warehouse data integration via Prisma + Supabase
-- Authentication and user roles
-- Performance insights dashboard with filtering
-
----
-
-## Live Demo  
- [https://shift-insight.vercel.app](https://shift-insight.vercel.app)
-
-## Repository  
- [https://github.com/corvuslabs/shift-insight](https://github.com/corvuslabs/shift-insight)
-
----
-
-## Overview
-Shift Insight was designed to demonstrate my ability to build and deploy **data-driven, full-stack applications** using modern web technologies.
-
-Key features include:
-- **Responsive dashboard UI** built with Next.js (App Router) and TailwindCSS  
-- **Database modeling and ORM** powered by Prisma  
-- **PostgreSQL integration** with Docker for local and Neon Cloud for production  
-- **Reusable UI components** from shadcn/ui  
-- **Seeded data model** representing realistic operational use cases
+A full-stack Next.js dashboard that tracks **throughput** and **delay minutes** by station.  
+Seed data generates realistic daily charts so you can demo instantly.
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-------------|
-| **Frontend** | Next.js 15 (App Router), TypeScript, Tailwind CSS, shadcn/ui |
-| **Backend / ORM** | Prisma |
-| **Database** | PostgreSQL (Docker for dev, Neon for production) |
-| **Deployment** | Vercel |
-| **Tooling** | Turbopack, ESLint, tsx |
+- Next.js 15 (App Router) + TypeScript  
+- Prisma ORM → Postgres (Neon)  
+- Recharts (charts)  
+- TailwindCSS + Radix UI (components)  
+- Server Actions (Quick Log)
 
 ---
 
-## Quick Start
+## Live Demo
 
-**Prerequisites:** Node 18+ and Docker Desktop
+Deployed on Vercel: (https://shift-insight.vercel.app)
+
+---
+
+## Requirements
+
+- **Node.js 18+** (recommended 18 / 20 / 22)  
+- **npm** (or pnpm / yarn)  
+- **Postgres connection** — e.g. [Neon](https://neon.tech) (free)
+
+---
+
+## Setup
 
 ```bash
-git clone https://github.com/corvuslabs/shift-insight.git
-cd shift-insight
-docker run --name pgdev -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=appdb -p 5432:5432 -d postgres:16
+# clone
+git clone https://github.com/<your-username>/shift-insight-dashboard.git
+cd shift-insight-dashboard
+
+# create env file
 cp .env.example .env
-npm install
-npx prisma migrate dev
-npm run db:seed
-npm run dev
+# add your DATABASE_URL inside .env
