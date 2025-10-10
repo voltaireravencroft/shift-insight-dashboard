@@ -33,7 +33,7 @@ Deployed on Vercel: (https://shift-insight.vercel.app)
 
 ```bash
 # clone
-git clone https://github.com/<your-username>/shift-insight-dashboard.git
+git clone https://github.com/voltaireravencroft/shift-insight-dashboard.git
 cd shift-insight-dashboard
 
 # create env file
