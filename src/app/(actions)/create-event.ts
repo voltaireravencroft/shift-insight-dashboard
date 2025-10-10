@@ -3,46 +3,44 @@
 import { prisma } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 
-type NewEvent = {
-  stationId: string;
-  kind: 'THROUGHPUT' | 'DELAY';
-  value: number;
-};
+export type EventKind = 'THROUGHPUT' | 'DELAY';
 
-// return a small discriminated union so the client can react if needed
-type CreateEventResult =
+export interface CreateEventInput {
+  stationId: string;
+  value: number;
+  kind: EventKind;
+  // include if your schema needs it; otherwise it’s fine to leave null
+  shiftId?: string | null;
+}
+
+export type CreateEventResult =
   | { ok: true }
   | { ok: false; error: string };
 
 export async function createEvent(
-  input: NewEvent
+  input: CreateEventInput
 ): Promise<CreateEventResult> {
   try {
-    const { stationId, kind, value } = input;
+    const { stationId, kind, value, shiftId = null } = input;
 
-    if (!stationId || !kind || Number.isNaN(value)) {
+    if (!stationId || (kind !== 'THROUGHPUT' && kind !== 'DELAY') || !Number.isFinite(value)) {
       return { ok: false, error: 'Invalid input' };
     }
 
-    // If you have a real shift id, use it; otherwise seed created one or null
     await prisma.event.create({
       data: {
         stationId,
         kind,
         value,
+        shiftId,
         happenedAt: new Date(),
-        // shiftId: <put a real shift id if required by your schema>
       },
     });
 
-    // Refresh data on the dashboard
     revalidatePath('/');
-
     return { ok: true };
-  } catch (err) {
-    // never type catch param as `any`; treat it as unknown
-    const msg =
-      err instanceof Error ? err.message : 'Unknown error';
-    return { ok: false, error: msg };
+  } catch (err: unknown) {                     // 👈 important: NOT `any`
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    return { ok: false, error: message };
   }
 }
