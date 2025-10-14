@@ -1,5 +1,6 @@
 // prisma/seed.ts
 import { PrismaClient, EventType } from "@prisma/client";
+import type { Prisma } from '@prisma/client';
 import { startOfDay } from "date-fns";
 
 const prisma = new PrismaClient();
@@ -55,9 +56,9 @@ async function main() {
   const stations = await prisma.station.findMany({ select: { id: true } });
   // Hours 07:00 .. 18:00 (change the 7/12 if you want a wider range)
   const hours = Array.from({ length: 12 }, (_, i) => 7 + i);
-
+ 
   // Strongly typed createMany data array
-  const events: Parameters<typeof prisma.event.createMany>[0]["data"] = [];
+  const events: Prisma.EventCreateManyInput[] = [];
 
   for (const s of stations) {
     for (const h of hours) {

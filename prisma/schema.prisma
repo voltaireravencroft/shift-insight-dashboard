@@ -51,11 +51,11 @@ enum EventType {
 
 model Event {
   id         String    @id @default(cuid())
-  shiftId    String
+  shiftId    String?
   stationId  String
   kind       EventType
   value      Int // units or minutes
   happenedAt DateTime  @default(now())
-  shift      Shift     @relation(fields: [shiftId], references: [id], onDelete: Cascade)
-  station    Station   @relation(fields: [stationId], references: [id], onDelete: Restrict)
+  shift      Shift?     @relation(fields: [shiftId], references: [id])
+  station    Station   @relation(fields: [stationId], references: [id])
 }

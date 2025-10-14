@@ -28,14 +28,14 @@ export async function createEvent(
     }
 
     await prisma.event.create({
-      data: {
-        stationId,
-        kind,
-        value,
-        shiftId,
-        happenedAt: new Date(),
-      },
-    });
+  data: {
+    stationId,
+    kind,
+    value,
+    ...(shiftId ? { shiftId } : {}), // ✅ only include if defined
+    happenedAt: new Date(),
+  },
+});
 
     revalidatePath('/');
     return { ok: true };
