@@ -21,6 +21,17 @@ Deployed on Vercel: (https://shift-insight.vercel.app)
 
 ---
 
+## 🧠 Development Notes
+
+Shift-Insight is actively evolving — the goal is to deliver clean, insightful analytics for warehouse operations while keeping the interface intuitive.  
+
+Some features in the interface (like the “Quick Log” button or visual theme customization) are intentionally visible but not yet fully wired.  
+They’re placeholders showing where future functionality will live, so reviewers can see the intended direction and scope at a glance.  
+
+> *“If it doesn’t work yet, it’s because I’m still teaching it how to.”*  
+
+---
+
 ## Requirements
 
 - **Node.js 18+** (recommended 18 / 20 / 22)  
